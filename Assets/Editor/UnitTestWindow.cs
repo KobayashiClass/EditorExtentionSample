@@ -76,7 +76,8 @@ public class UnitTestWindow : EditorWindow
             NonSelectedGUI("[ MonoBehaviour ] を継承したコンポーネントがアタッチされたゲームオブジェクトを選択してください");
             return false;
         }
-        m_selectComponentIndex = EditorGUILayout.Popup(m_selectComponentIndex, ComponentNames);
+        if (m_selectComponentIndex >= ComponentNames.Length) m_selectComponentIndex = 0;
+         m_selectComponentIndex = EditorGUILayout.Popup(m_selectComponentIndex, ComponentNames);
         return true;
     }
 
@@ -87,6 +88,7 @@ public class UnitTestWindow : EditorWindow
             NonSelectedGUI("実行できるメソッドが存在しません");
             return false;
         }
+        if (m_selectMethodIndex >= MethodNames.Length) m_selectMethodIndex = 0;
         m_selectMethodIndex = EditorGUILayout.Popup(m_selectMethodIndex, MethodNames);
         return true;
     }
@@ -129,9 +131,9 @@ public class UnitTestWindow : EditorWindow
             var currentValue = (float)current;
             current = EditorGUILayout.FloatField(paramInfo.Name, currentValue);
         }
-        else if (current == null || paramInfo.ParameterType == typeof(string))
+        else if (paramInfo.ParameterType == typeof(string))
         {
-            if (current.GetType() != typeof(string)) current = 0;
+            if (current == null || current.GetType() != typeof(string)) current = "";
             var currentValue = (string)current;
             current = EditorGUILayout.TextField(paramInfo.Name, currentValue);
         }
